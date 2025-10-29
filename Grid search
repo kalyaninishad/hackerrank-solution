@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+char* gridSearch(int G_count, char G[][1000], int P_count, char P[][1000]) {
+    int R = G_count;
+    int C = strlen(G[0]);
+    int r = P_count;
+    int c = strlen(P[0]);
+
+    for (int i = 0; i <= R - r; i++) {
+        for (int j = 0; j <= C - c; j++) {
+            bool found = true;
+            for (int pi = 0; pi < r && found; pi++) {
+                for (int pj = 0; pj < c; pj++) {
+                    if (G[i + pi][j + pj] != P[pi][pj]) {
+                        found = false;
+                        break;
+                    }
+                }
+            }
+            if (found)
+                return "YES";
+        }
+    }
+    return "NO";
+}
+
+int main() {
+    int t;
+    scanf("%d", &t);
+
+    while (t--) {
+        int R, C;
+        scanf("%d %d", &R, &C);
+        char G[1000][1000];
+        for (int i = 0; i < R; i++)
+            scanf("%s", G[i]);
+
+        int r, c;
+        scanf("%d %d", &r, &c);
+        char P[1000][1000];
+        for (int i = 0; i < r; i++)
+            scanf("%s", P[i]);
+
+        printf("%s\n", gridSearch(R, G, r, P));
+    }
+    return 0;
+}
