@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+void icecreamParlor(int m, int cost[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (cost[i] + cost[j] == m) {
+                printf("%d %d\n", i + 1, j + 1);  // +1 for 1-based index
+                return;
+            }
+        }
+    }
+}
+
+int main() {
+    int t;
+    scanf("%d", &t);  // Number of test cases
+
+    while (t--) {
+        int m, n;
+        scanf("%d", &m);  // Total money
+        scanf("%d", &n);  // Number of flavors
+
+        int cost[n];
+        for (int i = 0; i < n; i++) {
+            scanf("%d", &cost[i]);
+        }
+
+        icecreamParlor(m, cost, n);
+    }
+
+    return 0;
+}
