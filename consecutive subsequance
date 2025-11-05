@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAXK 101
+
+int main() {
+    int T;
+    scanf("%d", &T);
+
+    while (T--) {
+        int n, k;
+        scanf("%d %d", &n, &k);
+        
+        long long count = 0;
+        int *a = (int*)malloc(n * sizeof(int));
+        for (int i = 0; i < n; i++)
+            scanf("%d", &a[i]);
+
+        long long freq[MAXK] = {0}; // frequency of each mod value
+        freq[0] = 1; // empty prefix contributes to mod 0
+
+        long long prefix = 0;
+        for (int i = 0; i < n; i++) {
+            prefix = (prefix + a[i]) % k;
+            if (prefix < 0) prefix += k;
+
+            count += freq[prefix];
+            freq[prefix]++;
+        }
+
+        printf("%lld\n", count);
+        free(a);
+    }
+
+    return 0;
+}
