@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+long long gridlandMetro(long long n, long long m, long long k, vector<vector<long long>> &tracks) {
+    // Map to store tracks row-wise
+    unordered_map<long long, vector<pair<long long, long long>>> rowTracks;
+
+    // Step 1: Group all track segments by row
+    for (auto &t : tracks) {
+        long long r = t[0], c1 = t[1], c2 = t[2];
+        rowTracks[r].push_back({c1, c2});
+    }
+
+    long long totalTrackCells = 0;
+
+    // Step 2: For each row, merge overlapping intervals
+    for (auto &entry : rowTracks) {
+        auto &intervals = entry.second;
+
+        // Sort intervals by starting column
+        sort(intervals.begin(), intervals.end());
+
+        long long mergedStart = intervals[0].first;
+        long long mergedEnd = intervals[0].second;
+
+        for (size_t i = 1; i < intervals.size(); i++) {
+            long long start = intervals[i].first;
+            long long end = intervals[i].second;
+
+            // If overlapping or continuous, merge them
+            if (start <= mergedEnd + 1) {
+                mergedEnd = max(mergedEnd, end);
+            } else {
+                // Non-overlapping: add current interval length
+                totalTrackCells += (mergedEnd - mergedStart + 1);
+                mergedStart = start;
+                mergedEnd = end;
+            }
+        }
+        // Add the last merged interval
+        totalTrackCells += (mergedEnd - mergedStart + 1);
+    }
+
+    // Step 3: Total cells - occupied cells = available for lampposts
+    long long totalCells = n * m;
+    return totalCells - totalTrackCells;
+}
+
+int main() {
+    long long n, m, k;
+    cin >> n >> m >> k;
+
+    vector<vector<long long>> tracks(k, vector<long long>(3));
+
+    for (int i = 0; i < k; i++) {
+        cin >> tracks[i][0] >> tracks[i][1] >> tracks[i][2];
+    }
+
+    cout << gridlandMetro(n, m, k, tracks) << endl;
+    return 0;
+}
